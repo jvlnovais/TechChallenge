@@ -21,9 +21,10 @@ df_prophet = df.rename(columns={'data': 'ds', 'preco': 'y'})
 modelo = Prophet(daily_seasonality=True)
 modelo.fit(df_prophet)
 
-dias = st.slider('Quantos dias deseja prever?', 7, 90, 30)
+dias = st.selectbox("Quantos dias deseja prever?", (7, 90, 30),)
 futuro = modelo.make_future_dataframe(periods=dias)
 previsao = modelo.predict(futuro)
 
 fig2 = px.line(previsao, x='ds', y='yhat', title='Previsão de Preço para o Brent')
 st.plotly_chart(fig2, use_container_width=True)
+
