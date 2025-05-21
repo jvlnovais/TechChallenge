@@ -7,7 +7,7 @@ from sklearn.metrics import mean_absolute_error
 
 
 st.set_page_config(layout="wide")
-st.title("Dashboard Interativo - Preço do Petróleo Brent")
+st.title("Dashboard Interativo - Preço Petróleo")
 
 df = pd.read_excel('preco_petroleo.xlsx')
 df.columns = ['data', 'preco']
