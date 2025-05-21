@@ -32,7 +32,6 @@ st.title("Eventos Importantes para a História do Petróleo")
 
 st.subheader("📉 Impacto de Eventos Históricos no Preço do Petróleo")
 
-# Dicionário de eventos
 eventos = {
     "Crise de 2008": "2008-09-15",
     "COVID-19": "2020-03-11",
@@ -42,7 +41,6 @@ eventos = {
     "Ataque em Abqaiq-Khurais": "2019-09-14"
 }
 
-# Gera um gráfico para cada evento
 for nome, data in eventos.items():
     data_evento = pd.to_datetime(data)
     inicio = data_evento - pd.DateOffset(months=12)
@@ -52,7 +50,7 @@ for nome, data in eventos.items():
 
     fig = go.Figure()
 
-    # Linha de preço
+   
     fig.add_trace(go.Scatter(
         x=df_evento['data'], y=df_evento['preco'],
         mode='lines',
@@ -60,7 +58,7 @@ for nome, data in eventos.items():
         line=dict(color='royalblue', width=2)
     ))
 
-    # Linha vertical do evento
+
     fig.add_vline(
         x=data_evento,
         line_width=2,
@@ -68,7 +66,7 @@ for nome, data in eventos.items():
         line_color="red"
     )
 
-    # Anotação
+
     fig.add_annotation(
         x=data_evento,
         y=max(df_evento['preco']),
@@ -81,7 +79,6 @@ for nome, data in eventos.items():
         bgcolor="white"
     )
 
-    # Layout do gráfico
     fig.update_layout(
         title=f"📌 Evento: {nome}",
         xaxis_title="Data",
@@ -90,5 +87,4 @@ for nome, data in eventos.items():
         height=500
     )
 
-    # Exibir gráfico no Streamlit
     st.plotly_chart(fig, use_container_width=True)
