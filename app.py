@@ -14,7 +14,15 @@ df.columns = ['data', 'preco']
 df['data'] = pd.to_datetime(df['data'])
 df = df.dropna().sort_values('data')
 
+de = pd.read_excel('global_energy_usage.xlsx')
+de.columns = ['data','outros renovaveis','bio-combustivel','energia solar','energia eolica','hidroeletricas','nuclear','gas','petroleo','carvao','biomassa']
+de['data'] = pd.to_datetime(de['data'], format='%Y')
+de = de.dropna().sort_values('data')
+
 fig = px.line(df, x='data', y='preco', title='Histórico do Preço')
+st.plotly_chart(fig, use_container_width=True)
+
+fig = px.line(de, x='data', y='petroleo', title='Uso de Petróleo')
 st.plotly_chart(fig, use_container_width=True)
 
 df_prophet = df.rename(columns={'data': 'ds', 'preco': 'y'})
