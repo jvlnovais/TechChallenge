@@ -21,10 +21,70 @@ df_prophet = df.rename(columns={'data': 'ds', 'preco': 'y'})
 modelo = Prophet(daily_seasonality=True)
 modelo.fit(df_prophet)
 
-dias = st.selectbox("Quantos dias deseja prever?", (7, 90, 30),)
+dias = st.selectbox("Quantos dias deseja prever?", (7, 90, 30))
 futuro = modelo.make_future_dataframe(periods=dias)
 previsao = modelo.predict(futuro)
 
 fig2 = px.line(previsao, x='ds', y='yhat', title='Previsão de Preço para o Brent')
 st.plotly_chart(fig2, use_container_width=True)
 
+st.title("Eventos Importantes para a História do Petróleo")
+
+eventos = {
+    "Crise de 2008": "2008-09-15",
+    "COVID-19": "2020-03-11",
+    "Guerra na Ucrânia": "2022-02-24",
+    "Corte da OPEP+": "2023-04-01",
+    "Guerra do Golfo": "1990-08-02",
+    "Ataque em Abqaiq-Khurais": "2019-09-14"
+}
+
+# Gera um gráfico para cada evento
+for nome, data in eventos.items():
+    data_evento = pd.to_datetime(data)
+    inicio = data_evento - pd.DateOffset(months=12)
+    fim = data_evento + pd.DateOffset(months=12)
+    
+    df_evento = df[(df['data'] >= inicio) & (df['data'] <= fim)]
+
+    fig = go.Figure()
+
+    # Linha de preço
+    fig.add_trace(go.Scatter(
+        x=df_evento['data'], y=df_evento['preco'],
+        mode='lines',
+        name='Preço Brent',
+        line=dict(color='royalblue', width=2)
+    ))
+
+    # Linha vertical para o evento
+    fig.add_vline(
+        x=data_evento,
+        line_width=2,
+        line_dash="dash",
+        line_color="red"
+    )
+
+    # Anotação do evento
+    fig.add_annotation(
+        x=data_evento,
+        y=max(df_evento['preco']),
+        text=nome,
+        showarrow=True,
+        arrowhead=1,
+        ax=0,
+        ay=-40,
+        font=dict(color="red", size=12),
+        bgcolor="white"
+    )
+
+    # Layout
+    fig.update_layout(
+        title=f' {nome}',
+        xaxis_title='Data',
+        yaxis_title='Preço do Petróleo (USD)',
+        template='plotly_white',
+        height=500
+    )
+
+    fig.show()
