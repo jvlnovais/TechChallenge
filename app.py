@@ -30,6 +30,9 @@ st.plotly_chart(fig2, use_container_width=True)
 
 st.title("Eventos Importantes para a História do Petróleo")
 
+st.subheader("📉 Impacto de Eventos Históricos no Preço do Petróleo")
+
+# Dicionário de eventos
 eventos = {
     "Crise de 2008": "2008-09-15",
     "COVID-19": "2020-03-11",
@@ -57,7 +60,7 @@ for nome, data in eventos.items():
         line=dict(color='royalblue', width=2)
     ))
 
-    # Linha vertical para o evento
+    # Linha vertical do evento
     fig.add_vline(
         x=data_evento,
         line_width=2,
@@ -65,7 +68,7 @@ for nome, data in eventos.items():
         line_color="red"
     )
 
-    # Anotação do evento
+    # Anotação
     fig.add_annotation(
         x=data_evento,
         y=max(df_evento['preco']),
@@ -78,13 +81,14 @@ for nome, data in eventos.items():
         bgcolor="white"
     )
 
-    # Layout
+    # Layout do gráfico
     fig.update_layout(
-        title=f' {nome}',
-        xaxis_title='Data',
-        yaxis_title='Preço do Petróleo (USD)',
-        template='plotly_white',
+        title=f"📌 Evento: {nome}",
+        xaxis_title="Data",
+        yaxis_title="Preço do Petróleo (USD)",
+        template="plotly_white",
         height=500
     )
 
-    fig.show()
+    # Exibir gráfico no Streamlit
+    st.plotly_chart(fig, use_container_width=True)
